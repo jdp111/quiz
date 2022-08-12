@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}survey{% endblock %}
+
+{% block content %}
+<header class = "title"> {{Qname}}</header> 
+
+<form action="/questions/0">
+    <button class="startbut">Start!</button>
+</form>
+
+{% endblock %}
