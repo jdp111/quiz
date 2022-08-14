@@ -6,6 +6,14 @@
 
 <header>{{question}}</header>
 
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <p> you are trying to access a restricted question</p>
+  {% endif %}
+{% endwith %}
+
+
 <p>
 <form action="/questions/{{num+1}}" method="POST">
 {% for answer in choices %}

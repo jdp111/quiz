@@ -8,7 +8,6 @@ app.config['SECRET_KEY'] = "19191882882"
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 debug = DebugToolbarExtension(app)
 
-responses = []
 survey = S.surveys["satisfaction"].questions
 Qnum = 0
 
@@ -20,7 +19,10 @@ def default_route():
 
 @app.route('/questions/<int:number>')
 def redirect_to_current(number):
+
+    responses = session['responses']
     if not number == len(responses):
+        flash("you are trying to access an invalid question")
         return redirect(f"/questions/{len(responses)}")
 
     if number == len(survey):
@@ -40,9 +42,10 @@ def show_question(number):
     
     #if not number == len(responses):
     #    return redirect(f"/questions/{len(responses)}")
-    
+    responses = session['responses']
     responses.append(request.form["ans"])
-    
+    session['responses'] = responses
+
     if number == len(survey):
         return redirect('/end-quiz')
 
@@ -58,3 +61,8 @@ def show_question(number):
 @app.route('/end-quiz')
 def thank_you():
     return render_template('thanks.html')
+
+@app.route('/post_response', methods = ["POST"])
+def create_session():
+    session['responses'] = []
+    return redirect('/questions/0')
